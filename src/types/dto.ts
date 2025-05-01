@@ -1,6 +1,10 @@
 // src/types/dto.ts
 
 // --- Authentication & User ---
+export enum UserRole {
+  ADMIN = "admin",
+  GUEST = "guest",
+}
 
 // Data yang dibutuhkan untuk Login
 export interface LoginDTO {

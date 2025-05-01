@@ -27,6 +27,24 @@ function DataTable<T extends DataItem>({
   error = null,
 }: DataTableProps<T>) {
   // ... (isLoading, error, no data checks remain the same) ...
+  if (isLoading) {
+    return (
+      <div className="table-container">
+        <p>Loading data...</p>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="table-container error-message">
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
+  // Anda juga bisa menambahkan cek data kosong di sini jika mau
+  // if (!isLoading && !error && (!data || data.length === 0)) {
+  //    return <div className="table-container"><p>No data available.</p></div>;
+  // }
 
   return (
     <div className="table-container">
@@ -43,25 +61,24 @@ function DataTable<T extends DataItem>({
             <tr key={item.id}>
               {columns.map((col) => (
                 <td key={`${item.id}-${String(col.key)}`}>
-                  {col.key === "actions" ? (
-                    <div className="table-actions">
-                      {onEdit && (
-                        <button onClick={() => onEdit(item)}>Edit</button>
-                      )}
-                      {onDelete && (
-                        <button onClick={() => onDelete(item.id)}>
-                          Delete
-                        </button>
-                      )}
-                    </div>
-                  ) : // Use render function if provided, otherwise access directly
-                  col.render ? (
-                    col.render(item)
-                  ) : item[col.key as keyof T] instanceof Date ? (
-                    item[col.key as keyof T].toLocaleString()
-                  ) : (
-                    String(item[col.key as keyof T] ?? "")
-                  ) // Handle null/undefined
+                  {
+                    col.key === "actions" ? (
+                      <div className="table-actions">
+                        {onEdit && (
+                          <button onClick={() => onEdit(item)}>Edit</button>
+                        )}
+                        {onDelete && (
+                          <button onClick={() => onDelete(item.id)}>
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    ) : // Use render function if provided, otherwise access directly
+                    col.render ? (
+                      col.render(item)
+                    ) : (
+                      String(item[col.key as keyof T] ?? "")
+                    ) // Handle null/undefined
                   }
                 </td>
               ))}

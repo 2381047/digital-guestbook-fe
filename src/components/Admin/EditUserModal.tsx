@@ -1,11 +1,11 @@
 // src/components/Admin/EditUserModal.tsx
 import React, { useState, useEffect } from "react";
-import { ProfileDTO } from "../../types/dto"; // Sesuaikan path DTO
+import { UserData } from "../../types/dto"; // Sesuaikan path DTO
 import "../../styles/form.css"; // Buat atau gunakan file CSS untuk styling form/modal
 
 interface EditUserModalProps {
-  user: ProfileDTO; // Data user awal
-  onSave: (updatedUserData: Partial<ProfileDTO>) => void; // Fungsi saat save
+  user: UserData; // Data user awal
+  onSave: (updatedUserData: Partial<UserData>) => void; // Fungsi saat save
   onClose: () => void; // Fungsi saat close
 }
 
@@ -31,7 +31,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Kumpulkan data yang diubah saja (atau semua field jika API Anda mengharapkannya)
-    const updatedData: Partial<ProfileDTO> = {};
+    const updatedData: Partial<UserData> = {};
     if (name !== user.name) updatedData.name = name;
     if (email !== user.email) updatedData.email = email;
     if (role !== user.role) updatedData.role = role;
@@ -79,7 +79,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
             <select
               id="role"
               value={role}
-              onChange={(e) => setRole(e.target.value as ProfileDTO["role"])} // Pastikan role sesuai tipe
+              onChange={(e) => setRole(e.target.value as UserData["role"])} // Pastikan role sesuai tipe
             >
               <option value="guest">Guest</option>
               <option value="admin">Admin</option>

@@ -4,20 +4,20 @@ import api from "../../services/api";
 import DataTable from "./DataTable";
 // Sesuaikan path DTO jika perlu. Asumsi ProfileDTO berisi id, name, email, role.
 // Anda mungkin perlu membuat atau mengimpor tipe UpdateUserDto jika fieldnya berbeda
-import { ProfileDTO } from "../../types/dto"; // Contoh path ke DTO Anda
+import { UserData } from "../../types/dto"; // Contoh path ke DTO Anda
 
 // Import komponen Modal yang akan kita buat
 import EditUserModal from "./EditUserModal";
 import "../../styles/table.css"; // Pastikan path style benar
 
 const UserTable: React.FC = () => {
-  const [users, setUsers] = useState<ProfileDTO[]>([]);
+  const [users, setUsers] = useState<UserData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // --- STATE BARU UNTUK EDIT ---
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editingUser, setEditingUser] = useState<ProfileDTO | null>(null);
+  const [editingUser, setEditingUser] = useState<UserData | null>(null);
   // --- AKHIR STATE BARU ---
 
   const fetchUsers = async () => {
@@ -40,7 +40,7 @@ const UserTable: React.FC = () => {
   }, []);
 
   // --- MODIFIKASI handleEdit ---
-  const handleEdit = (user: ProfileDTO) => {
+  const handleEdit = (user: UserData) => {
     console.log("Opening edit modal for user:", user);
     setEditingUser(user); // Simpan user yang akan diedit
     setIsEditing(true); // Buka modal
@@ -55,7 +55,7 @@ const UserTable: React.FC = () => {
   // --- AKHIR FUNGSI BARU ---
 
   // --- FUNGSI BARU UNTUK MENYIMPAN PERUBAHAN ---
-  const handleSaveUser = async (updatedUserData: Partial<ProfileDTO>) => {
+  const handleSaveUser = async (updatedUserData: Partial<UserData>) => {
     if (!editingUser) return; // Safety check
 
     setError(null);
@@ -106,7 +106,7 @@ const UserTable: React.FC = () => {
   return (
     <>
       {/* Render DataTable seperti sebelumnya */}
-      <DataTable<ProfileDTO>
+      <DataTable<UserData>
         columns={columns}
         data={users}
         onEdit={handleEdit} // onEdit sekarang memanggil handleEdit yang sudah dimodifikasi

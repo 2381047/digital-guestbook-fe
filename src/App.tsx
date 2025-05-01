@@ -1,12 +1,16 @@
+// src/App.tsx
 import { Routes, Route, Outlet, Link, useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import GuestPage from "./pages/GuestPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
-import RegisterPage from "./pages/RegisterPage"; // <-- Import RegisterPage
+import RegisterPage from "./pages/RegisterPage";
 import RequireAuth from "./components/Layout/RequireAuth";
 import { useAuth } from "./hooks/useAuth";
+import { UserRole } from "./types/dto";
+// Import komponen 404 Anda (jika ada)
+// import NotFoundPage from './pages/NotFoundPage';
 
-// Layout component remains the same...
+// Layout component (tidak ada perubahan)
 function Layout() {
   const { isAuthenticated, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
@@ -18,21 +22,14 @@ function Layout() {
 
   return (
     <div>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "1rem",
-          borderBottom: "1px solid #444",
-          marginBottom: "1rem",
-        }}
-      >
+      <header /* ... styling ... */>
         <h1>Digital Guestbook</h1>
         <nav>
           <ul style={{ listStyle: "none", display: "flex", gap: "1rem" }}>
             <li>
               <Link to="/guest-form">Guest Form</Link>
             </li>
+            {/* Tampilkan link Admin hanya jika user adalah Admin */}
             {isAdmin && (
               <li>
                 <Link to="/admin-dashboard">Admin Dashboard</Link>
@@ -44,32 +41,21 @@ function Layout() {
               </li>
             ) : (
               <>
-                {" "}
-                {/* Use Fragment */}
                 <li>
                   <Link to="/login">Login</Link>
                 </li>
                 <li>
                   <Link to="/register">Register</Link>
-                </li>{" "}
-                {/* <-- Add Register Link */}
+                </li>
               </>
             )}
           </ul>
         </nav>
       </header>
       <main className="container">
-        <Outlet />
+        <Outlet /> {/* Konten halaman akan dirender di sini */}
       </main>
-      <footer
-        style={{
-          textAlign: "center",
-          marginTop: "2rem",
-          padding: "1rem",
-          borderTop: "1px solid #444",
-          fontSize: "0.8em",
-        }}
-      >
+      <footer /* ... styling ... */>
         <p>© {new Date().getFullYear()} Digital Guestbook</p>
       </footer>
     </div>
@@ -79,26 +65,43 @@ function Layout() {
 function App() {
   return (
     <Routes>
+      {/* Semua rute berada di dalam Layout */}
       <Route path="/" element={<Layout />}>
-        {/* Public routes */}
+        {/* Rute Publik */}
+        <Route index element={<GuestPage />} /> {/* Halaman utama */}
         <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />{" "}
-        {/* <-- Add Register Route */}
+        <Route path="register" element={<RegisterPage />} />
         <Route path="guest-form" element={<GuestPage />} />
-        <Route index element={<GuestPage />} />
-        {/* Protected Admin Route */}
+        {/* Halaman lain yang bisa diakses publik */}
+        {/* <Route path="about" element={<AboutPage />} /> */}
+        {/* --- PERBAIKAN ROUTING ADMIN --- */}
+        {/* Bungkus rute admin dengan RequireAuth */}
         <Route
           path="admin-dashboard"
           element={
-            <RequireAuth requireAdmin={true}>
+            <RequireAuth allowedRoles={[UserRole.ADMIN]}>
               <AdminDashboardPage />
             </RequireAuth>
           }
         />
-        <Route path="*" element={<h2>Page Not Found</h2>} />
-      </Route>
+        {/* Jika ada rute admin lain, bungkus juga */}
+        {/* <Route
+          path="admin-settings"
+          element={
+            <RequireAuth allowedRoles={[UserRole.ADMIN]}>
+              <AdminSettingsPage />
+            </RequireAuth>
+          }
+        /> */}
+        {/* --- AKHIR PERBAIKAN ROUTING ADMIN --- */}
+        {/* Halaman Not Found (Catch-all Route) */}
+        {/* Pastikan ini adalah Route terakhir di dalam <Routes> */}
+        <Route path="*" element={<div>404 - Halaman Tidak Ditemukan</div>} />
+        {/* Ganti <div> dengan komponen 404 Anda: */}
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
+      </Route>{" "}
+      {/* Akhir Route Layout */}
     </Routes>
   );
 }
-
 export default App;
