@@ -1,0 +1,73 @@
+.form-container {
+  max-width: 500px;
+  margin: 2rem auto; /* Center form */
+  padding: 2rem;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #2d2d2d;
+}
+
+@media (prefers-color-scheme: light) {
+  .form-container {
+    background-color: #f9f9f9;
+    border-color: #ddd;
+  }
+}
+
+.form-container h1,
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  /* Inherit padding/border from global.css */
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.form-actions button {
+  min-width: 120px;
+}
+
+.form-link {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9em;
+}
+
+/* Simple Flexbox for responsiveness if needed inside form */
+/* Example: Make two inputs side-by-side on larger screens */
+/* .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .form-row > .form-group {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 150px;
+  }
+  
+  @media (max-width: 600px) {
+   .form-row > .form-group {
+      flex-basis: 100%;
+    }
+  } */
